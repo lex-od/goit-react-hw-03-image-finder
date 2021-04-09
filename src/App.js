@@ -3,14 +3,15 @@ import css from './styles/App.module.scss';
 import pixApi from './services/pixabayApi';
 
 const PAGE_SIZE = 12;
+const INIT_STATE = {
+    images: [],
+    searchQuery: '',
+    currPage: 0,
+    totalCount: 0,
+};
 
 class App extends Component {
-    state = {
-        images: [],
-        searchQuery: '',
-        currPage: 0,
-        totalCount: 0,
-    };
+    state = { ...INIT_STATE };
 
     componentDidMount() {
         // this.handleChangeQuery('ff');
@@ -23,7 +24,7 @@ class App extends Component {
     }
 
     handleChangeQuery = query => {
-        this.setState({ searchQuery: query, currPage: 0 });
+        this.setState({ ...INIT_STATE, searchQuery: query });
     };
 
     searchNextPage = async () => {
@@ -37,7 +38,7 @@ class App extends Component {
             );
 
             this.setState(({ images, currPage }) => ({
-                images: [...images, hits],
+                images: [...images, ...hits],
                 currPage: currPage + 1,
                 totalCount: totalHits,
             }));
@@ -52,11 +53,12 @@ class App extends Component {
     }
 
     render() {
-        console.log('isLastPage:', this.isLastPage());
+        // console.log('isLastPage:', this.isLastPage());
+        // console.log(this.state.images);
 
         return (
             <div className={css.App}>
-                <button onClick={this.searchNextPage}>Next Page</button>
+                {/* <button onClick={this.searchNextPage}>Next Page</button> */}
             </div>
         );
     }

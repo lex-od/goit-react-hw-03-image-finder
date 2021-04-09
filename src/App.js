@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import './styles/App.module.scss';
+import css from './styles/App.module.scss';
 
 class App extends Component {
     render() {
-        return <div></div>;
+        return <div className={css.App}></div>;
     }
 }
 

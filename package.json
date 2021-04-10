@@ -2,7 +2,7 @@
     "name": "react-clear-template",
     "version": "0.1.0",
     "private": true,
-    "homepage": "https://lex-od.github.io/repository-name",
+    "homepage": "https://lex-od.github.io/goit-react-hw-03-image-finder",
     "dependencies": {
         "@testing-library/jest-dom": "^5.11.10",
         "@testing-library/react": "^11.2.6",

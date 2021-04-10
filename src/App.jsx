@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import Loader from 'react-loader-spinner';
 import css from './styles/App.module.scss';
 import pixApi from './services/pixabayApi';
 import Searchbar from './components/Searchbar';
@@ -47,6 +48,8 @@ class App extends Component {
     searchNextPage = async () => {
         const { searchQuery, currPage } = this.state;
 
+        this.setState({ isLoading: true });
+
         try {
             const { hits, totalHits } = await pixApi.searchImages(
                 searchQuery,
@@ -61,6 +64,8 @@ class App extends Component {
             }));
         } catch (err) {
             console.log(`${err.name}: ${err.message}`);
+        } finally {
+            this.setState({ isLoading: false });
         }
     };
 
@@ -70,18 +75,29 @@ class App extends Component {
     }
 
     render() {
-        // console.log('isLastPage:', this.isLastPage());
-        // console.log(this.state.images);
+        const { images, isLoading } = this.state;
 
-        const { images } = this.state;
+        const isLoadMoreShow = !this.isLastPage() && !isLoading;
 
         return (
             <div className={css.App}>
                 <Searchbar onSubmit={this.handleChangeQuery} />
-
                 <ImageGallery images={images} />
+                {isLoadMoreShow && (
+                    <Button onClick={this.searchNextPage}>Загрузить еще</Button>
+                )}
 
-                {!this.isLastPage() && <Button onClick={this.searchNextPage} />}
+                {isLoading && (
+                    <Loader
+                        // visible={true}
+                        type="Grid"
+                        color="#3f51b5"
+                        height={150}
+                        width={150}
+                        timeout={0}
+                        className={css.Loader}
+                    />
+                )}
             </div>
         );
     }

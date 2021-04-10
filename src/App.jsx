@@ -5,6 +5,7 @@ import pixApi from './services/pixabayApi';
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
 import Button from './components/Button';
+import Modal from './components/Modal';
 
 const PAGE_SIZE = 12;
 const STATE_BASE = {
@@ -19,6 +20,7 @@ class App extends Component {
         searchQuery: '',
         isLoading: false,
         error: null,
+        modalImg: '',
     };
 
     componentDidUpdate(prevProps, prevState) {
@@ -36,6 +38,10 @@ class App extends Component {
             });
         }
     }
+
+    handleShowModal = modalImg => {
+        this.setState({ modalImg });
+    };
 
     handleChangeQuery = query => {
         // Без этой проверки повторный поиск по последнему запросу приведет к пустой галерее
@@ -76,7 +82,7 @@ class App extends Component {
     }
 
     render() {
-        const { images, isLoading, error } = this.state;
+        const { images, isLoading, error, modalImg } = this.state;
 
         const isLoadMoreShow = !this.isLastPage() && !isLoading;
 
@@ -84,7 +90,10 @@ class App extends Component {
             <div className={css.App}>
                 <Searchbar onSubmit={this.handleChangeQuery} />
 
-                <ImageGallery images={images} />
+                <ImageGallery
+                    images={images}
+                    onItemClick={this.handleShowModal}
+                />
 
                 {error && (
                     <p className={css.error}>
@@ -106,6 +115,12 @@ class App extends Component {
                         timeout={0}
                         className={css.Loader}
                     />
+                )}
+
+                {modalImg && (
+                    <Modal>
+                        <img src={modalImg} alt="" />
+                    </Modal>
                 )}
             </div>
         );

@@ -3,6 +3,7 @@ import css from './styles/App.module.scss';
 import pixApi from './services/pixabayApi';
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
+import Button from './components/Button';
 
 const PAGE_SIZE = 12;
 const INIT_STATE = {
@@ -19,9 +20,22 @@ class App extends Component {
         if (prevState.searchQuery !== this.state.searchQuery) {
             this.searchNextPage();
         }
+
+        if (
+            this.state.currPage > prevState.currPage &&
+            this.state.currPage > 1
+        ) {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth',
+            });
+        }
     }
 
     handleChangeQuery = query => {
+        // Без этой проверки повторный поиск по последнему запросу приведет к пустой галерее
+        if (query === this.state.searchQuery) return;
+
         this.setState({ ...INIT_STATE, searchQuery: query });
     };
 
@@ -59,7 +73,10 @@ class App extends Component {
         return (
             <div className={css.App}>
                 <Searchbar onSubmit={this.handleChangeQuery} />
+
                 <ImageGallery images={images} />
+
+                {!this.isLastPage() && <Button onClick={this.searchNextPage} />}
             </div>
         );
     }

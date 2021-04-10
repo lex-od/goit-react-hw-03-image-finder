@@ -6,15 +6,18 @@ import ImageGallery from './components/ImageGallery/ImageGallery';
 import Button from './components/Button';
 
 const PAGE_SIZE = 12;
-const INIT_STATE = {
+const STATE_BASE = {
     images: [],
-    searchQuery: '',
     currPage: 0,
     totalCount: 0,
 };
 
 class App extends Component {
-    state = { ...INIT_STATE };
+    state = {
+        ...STATE_BASE,
+        searchQuery: '',
+        isLoading: false,
+    };
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.searchQuery !== this.state.searchQuery) {
@@ -36,7 +39,9 @@ class App extends Component {
         // Без этой проверки повторный поиск по последнему запросу приведет к пустой галерее
         if (query === this.state.searchQuery) return;
 
-        this.setState({ ...INIT_STATE, searchQuery: query });
+        if (this.state.isLoading) return;
+
+        this.setState({ ...STATE_BASE, searchQuery: query });
     };
 
     searchNextPage = async () => {

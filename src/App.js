@@ -2,6 +2,7 @@ import { Component } from 'react';
 import css from './styles/App.module.scss';
 import pixApi from './services/pixabayApi';
 import Searchbar from './components/Searchbar';
+import ImageGallery from './components/ImageGallery/ImageGallery';
 
 const PAGE_SIZE = 12;
 const INIT_STATE = {
@@ -53,9 +54,12 @@ class App extends Component {
         // console.log('isLastPage:', this.isLastPage());
         // console.log(this.state.images);
 
+        const { images } = this.state;
+
         return (
             <div className={css.App}>
                 <Searchbar onSubmit={this.handleChangeQuery} />
+                <ImageGallery images={images} />
             </div>
         );
     }

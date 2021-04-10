@@ -39,7 +39,7 @@ class App extends Component {
         }
     }
 
-    handleShowModal = modalImg => {
+    handleShowModal = (modalImg = '') => {
         this.setState({ modalImg });
     };
 
@@ -108,9 +108,9 @@ class App extends Component {
                 {isLoading && (
                     <Loader
                         // visible={true}
-                        type="Grid"
+                        type="ThreeDots"
                         color="#3f51b5"
-                        height={150}
+                        height={50}
                         width={150}
                         timeout={0}
                         className={css.Loader}
@@ -118,7 +118,7 @@ class App extends Component {
                 )}
 
                 {modalImg && (
-                    <Modal>
+                    <Modal onClose={this.handleShowModal}>
                         <img src={modalImg} alt="" />
                     </Modal>
                 )}

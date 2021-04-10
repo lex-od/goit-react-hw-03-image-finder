@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import css from './styles/App.module.scss';
 import pixApi from './services/pixabayApi';
+import Searchbar from './components/Searchbar';
 
 const PAGE_SIZE = 12;
 const INIT_STATE = {
@@ -12,10 +13,6 @@ const INIT_STATE = {
 
 class App extends Component {
     state = { ...INIT_STATE };
-
-    componentDidMount() {
-        // this.handleChangeQuery('ff');
-    }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.searchQuery !== this.state.searchQuery) {
@@ -58,7 +55,7 @@ class App extends Component {
 
         return (
             <div className={css.App}>
-                {/* <button onClick={this.searchNextPage}>Next Page</button> */}
+                <Searchbar onSubmit={this.handleChangeQuery} />
             </div>
         );
     }

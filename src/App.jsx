@@ -18,6 +18,7 @@ class App extends Component {
         ...STATE_BASE,
         searchQuery: '',
         isLoading: false,
+        error: null,
     };
 
     componentDidUpdate(prevProps, prevState) {
@@ -48,7 +49,7 @@ class App extends Component {
     searchNextPage = async () => {
         const { searchQuery, currPage } = this.state;
 
-        this.setState({ isLoading: true });
+        this.setState({ isLoading: true, error: null });
 
         try {
             const { hits, totalHits } = await pixApi.searchImages(
@@ -62,8 +63,8 @@ class App extends Component {
                 currPage: currPage + 1,
                 totalCount: totalHits,
             }));
-        } catch (err) {
-            console.log(`${err.name}: ${err.message}`);
+        } catch (error) {
+            this.setState({ error });
         } finally {
             this.setState({ isLoading: false });
         }
@@ -75,14 +76,22 @@ class App extends Component {
     }
 
     render() {
-        const { images, isLoading } = this.state;
+        const { images, isLoading, error } = this.state;
 
         const isLoadMoreShow = !this.isLastPage() && !isLoading;
 
         return (
             <div className={css.App}>
                 <Searchbar onSubmit={this.handleChangeQuery} />
+
                 <ImageGallery images={images} />
+
+                {error && (
+                    <p className={css.error}>
+                        Что-то пошло не так! {error.name}: {error.message}
+                    </p>
+                )}
+
                 {isLoadMoreShow && (
                     <Button onClick={this.searchNextPage}>Загрузить еще</Button>
                 )}
